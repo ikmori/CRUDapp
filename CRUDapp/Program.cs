@@ -48,6 +48,8 @@ namespace SimpleCrudApp
             chkCompleted = new CheckBox { Text = "Completada", Location = new Point(460, 45) };
 
             btnAdd = new Button { Text = "Agregar", Location = new Point(20, 90), Width = 80 };
+            btnAdd.Click += BtnAdd_Click;
+
             btnUpdate = new Button { Text = "Actualizar", Location = new Point(110, 90), Width = 80 };
             btnDelete = new Button { Text = "Eliminar", Location = new Point(200, 90), Width = 80 };
 
@@ -71,6 +73,30 @@ namespace SimpleCrudApp
             this.Controls.Add(btnDelete);
             this.Controls.Add(grid);
 
+        }
+
+        private void ClearForm()
+        {
+            txtTitle.Clear();
+            txtDesc.Clear();
+            chkCompleted.Checked = false;
+        }
+
+        private void BtnAdd_Click(object sender, EventArgs e)
+        {
+            if (string.IsNullOrWhiteSpace(txtTitle.Text)) return;
+
+            var task = new TaskItem
+            {
+                Id = nextId++,
+                Title = txtTitle.Text,
+                Description = txtDesc.Text,
+                IsCompleted = chkCompleted.Checked
+            };
+
+            tasks.Add(task);
+            RefreshGrid();
+            ClearForm();
         }
 
         private void RefreshGrid()
