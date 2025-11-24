@@ -31,6 +31,7 @@ namespace SimpleCrudApp
         public MainForm()
         {
             InitializeComponent();
+            RefreshGrid();
         }
 
         private void InitializeComponent()
@@ -71,6 +72,13 @@ namespace SimpleCrudApp
             this.Controls.Add(grid);
 
         }
+
+        private void RefreshGrid()
+        {
+            grid.DataSource = null;
+            grid.DataSource = tasks.ToList();
+        }
+
 
         [STAThread]
         static void Main()
