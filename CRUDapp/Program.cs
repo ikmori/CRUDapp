@@ -91,7 +91,11 @@ namespace SimpleCrudApp
             chkCompleted.Checked = false;
         }
 
-
+        private void RefreshGrid()
+        {
+            grid.DataSource = null;
+            grid.DataSource = tasks.ToList();
+        }
 
 
         private void BtnAdd_Click(object sender, EventArgs e)
@@ -154,11 +158,7 @@ namespace SimpleCrudApp
             }
         }
 
-        private void RefreshGrid()
-        {
-            grid.DataSource = null;
-            grid.DataSource = tasks.ToList();
-        }
+        
 
 
         [STAThread]
