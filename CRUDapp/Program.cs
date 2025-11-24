@@ -6,9 +6,19 @@ using System.Windows.Forms;
 
 namespace SimpleCrudApp
 {
+    public class TaskItem
+    {
+        public int Id { get; set; }
+        public string Title { get; set; }
+        public string Description { get; set; }
+        public bool IsCompleted { get; set; }
+    }
 
     public class MainForm : Form
     {
+        private List<TaskItem> tasks = new List<TaskItem>();
+        private int nextId = 1;
+
         private DataGridView grid;
         private TextBox txtTitle;
         private TextBox txtDesc;
