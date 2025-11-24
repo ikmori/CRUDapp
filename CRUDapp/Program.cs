@@ -51,8 +51,11 @@ namespace SimpleCrudApp
             btnAdd.Click += BtnAdd_Click;
 
             btnUpdate = new Button { Text = "Actualizar", Location = new Point(110, 90), Width = 80 };
+            btnUpdate.Click += BtnUpdate_Click;
+            
             btnDelete = new Button { Text = "Eliminar", Location = new Point(200, 90), Width = 80 };
-
+            btnDelete.Click += BtnDelete_Click;
+            
             grid = new DataGridView
             {
                 Location = new Point(20, 140),
@@ -62,6 +65,12 @@ namespace SimpleCrudApp
                 MultiSelect = false,
                 ReadOnly = true
             };
+
+            
+            
+            grid.SelectionChanged += Grid_SelectionChanged;
+
+
 
             this.Controls.Add(lblTitle);
             this.Controls.Add(txtTitle);
@@ -82,6 +91,13 @@ namespace SimpleCrudApp
             chkCompleted.Checked = false;
         }
 
+        private void RefreshGrid()
+        {
+            grid.DataSource = null;
+            grid.DataSource = tasks.ToList();
+        }
+
+
         private void BtnAdd_Click(object sender, EventArgs e)
         {
             if (string.IsNullOrWhiteSpace(txtTitle.Text)) return;
@@ -99,11 +115,50 @@ namespace SimpleCrudApp
             ClearForm();
         }
 
-        private void RefreshGrid()
+        private void BtnUpdate_Click(object sender, EventArgs e)
         {
-            grid.DataSource = null;
-            grid.DataSource = tasks.ToList();
+            if (grid.SelectedRows.Count == 0) return;
+            int id = (int)grid.SelectedRows[0].Cells["Id"].Value;
+            var task = tasks.FirstOrDefault(t => t.Id == id);
+            if (task != null)
+            {
+                task.Title = txtTitle.Text;
+                task.Description = txtDesc.Text;
+                task.IsCompleted = chkCompleted.Checked;
+                RefreshGrid();
+                ClearForm();
+            }
         }
+
+        private void BtnDelete_Click(object sender, EventArgs e)
+        {
+            if (grid.SelectedRows.Count == 0) return;
+            int id = (int)grid.SelectedRows[0].Cells["Id"].Value;
+            var task = tasks.FirstOrDefault(t => t.Id == id);
+            if (task != null)
+            {
+                tasks.Remove(task);
+                RefreshGrid();
+                ClearForm();
+            }
+        }
+
+        private void Grid_SelectionChanged(object sender, EventArgs e)
+        {
+            if (grid.SelectedRows.Count > 0)
+            {
+                int id = (int)grid.SelectedRows[0].Cells["Id"].Value;
+                var task = tasks.FirstOrDefault(t => t.Id == id);
+                if (task != null)
+                {
+                    txtTitle.Text = task.Title;
+                    txtDesc.Text = task.Description;
+                    chkCompleted.Checked = task.IsCompleted;
+                }
+            }
+        }
+
+        
 
 
         [STAThread]
